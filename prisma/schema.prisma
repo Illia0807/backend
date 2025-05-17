@@ -1,0 +1,64 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+// Генератор Prisma Client (автоматически создает клиент для работы с БД)
+// Prisma Client generator (auto-generates a DB client)
+generator client {
+  provider = "prisma-client-js"
+  
+}
+
+// Подключение к источнику данных (PostgreSQL) через переменную окружения DATABASE_URL
+// Connecting to the data source (PostgreSQL) using the DATABASE_URL env variable
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Модель Clinner — описывает таблицу клинеров
+// Clinner model — describes the cleaners table
+model Clinner {
+  id            Int             @id @default(autoincrement())
+  name          String
+  img           String
+  rate          String
+  description   String
+  price         String
+  typeCleaning  ClinnerCleaningType[]
+  availableDates AvailableDate[]
+}
+
+
+// Модель CleaningType — определяет типы уборки
+// CleaningType model — defines the types of cleaning
+model CleaningType {
+  id    Int               @id @default(autoincrement())
+  name  String            @unique
+  clinners ClinnerCleaningType[]
+}
+
+
+// Связующая таблица для связи многие-ко-многим между Clinner и CleaningType
+// Join table for many-to-many relationship between Clinner and CleaningType
+model ClinnerCleaningType {
+  clinnerId     Int
+  cleaningTypeId Int
+
+  clinner       Clinner       @relation(fields: [clinnerId], references: [id])
+  cleaningType  CleaningType  @relation(fields: [cleaningTypeId], references: [id])
+
+  @@id([clinnerId, cleaningTypeId])
+}
+
+
+// Модель AvailableDate — хранит доступные даты для клинера
+// AvailableDate model — stores available dates for a clinner
+model AvailableDate {
+  id        Int     @id @default(autoincrement())
+  date      String
+  clinner   Clinner @relation(fields: [clinnerId], references: [id])
+  clinnerId Int
+}
