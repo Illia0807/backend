@@ -2,7 +2,12 @@
 export type CleaningType ="Regular Cleaning"| "Windows Cleaning"| "Deep Cleaning"|"Office Cleaning";
 
 
-
+export const cleaningTypeList: CleaningType[] = [
+  "Regular Cleaning",
+  "Windows Cleaning",
+  "Deep Cleaning",
+  "Office Cleaning",
+];
 
 
 

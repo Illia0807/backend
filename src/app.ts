@@ -7,6 +7,7 @@ import dotenv from "dotenv";
 // Import routes and services
 import clinnerRoutes from "./routes/clinnerRoutes";
 import { generateRandomClinners } from "./services/clinnerService";
+import { cleaningTypeList } from "./utils/types";
 
 // Load environment variables from .env file
 dotenv.config();
@@ -15,16 +16,25 @@ dotenv.config();
 const app = express();
 
 // Attach middleware
-app.use(cors());// Разрешение CORS (междоменные запросы)
+app.use(cors()); // Разрешение CORS (междоменные запросы)
 
 // Parse JSON bodies in incoming requests
 app.use(express.json());
 
 // Generate random clinners when the server starts
 // You can pass a specific typeCleaningId (e.g., "Windows Cleaning")
-generateRandomClinners("Windows Cleaning")
+/* const randomType = cleaningTypeList[Math.floor(Math.random() * cleaningTypeList.length)];
+generateRandomClinners(randomType)
   .then(() => {
     console.log("Clinners generated successfully");
+  })
+  .catch((error) => {
+    console.error("Error generating clinners:", error);
+  }); */
+
+Promise.all(cleaningTypeList.map((type) => generateRandomClinners(type)))
+  .then(() => {
+    console.log("Clinners generated successfully for all types.");
   })
   .catch((error) => {
     console.error("Error generating clinners:", error);
