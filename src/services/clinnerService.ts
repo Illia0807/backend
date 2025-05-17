@@ -85,7 +85,7 @@ export const generateRandomClinners = async (cleaningTypeName: CleaningType) => 
 };
 
 // Get clinners by cleaning type ID
-export const getClinnersByCleaningType = async (cleaningTypeId: CleaningType) => {
+export const getClinnersByCleaningType = async (cleaningTypeId: number) => {
 
   // Find clinners that have the specified cleaning type
   const clinners = await prisma.clinner.findMany({
